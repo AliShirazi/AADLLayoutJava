@@ -1,4 +1,4 @@
-AADLLayoutJavaTest
+AADLLayoutJava
 ==================
 AADL Graphical editor is built on the AADL (Architecture Analysis & Design Language). Currently, the project is looking to optimize the generated
 layouts from its AADL model files. This is currently being tested in Java before it is being transferred over. My task
