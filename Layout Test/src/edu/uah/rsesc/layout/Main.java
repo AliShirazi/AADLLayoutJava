@@ -11,19 +11,31 @@ import javax.swing.JFrame;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
+import edu.uah.rsesc.layout.Shape.PositionMode;
+
 public class Main {
 	public static void main(String[] args) {
 		final int numberOfShapes = 20;
 		final int numberOfConnections = 10;
-		final int numberOfSamples = 10000;		
+		final int numberOfSamples = 100000;		
+		
+		PositionMode[] position_Values = new PositionMode[3];
+		position_Values[0] = PositionMode.FREE;
+		position_Values[1] = PositionMode.SNAP_LEFT;
+		position_Values[2] = PositionMode.SNAP_RIGHT;
 		
 		// Create shapes
 		final Random rand = new Random();
+		final Random positionModeRandom = new Random();
+		int randomPositionModeIndex=0;
 		//final Random rand = new Random(42); // Switch back to have different sizes on each run
 		List<Shape> shapes = new ArrayList<Shape>(numberOfShapes);
-		for(int i = 0; i < numberOfShapes; i++) {
-			shapes.add(new Shape("S" + i, 0, 0, 30 + rand.nextInt(80), 30 + rand.nextInt(80)));
+		for(int i = 0; i < numberOfShapes; i++) 
+		{
+			randomPositionModeIndex = positionModeRandom.nextInt(2);
+			shapes.add(new Shape("S" + i, 0, 0, 30 + rand.nextInt(80), 30 + rand.nextInt(80), (PositionMode.values()[randomPositionModeIndex])));
 		}
+		
 		
 		// Create connections between random components
 		List<Connection> connections = new ArrayList<Connection>(numberOfConnections);
@@ -58,10 +70,12 @@ public class Main {
 		}
 
 		// Layout the shapes
-		final MonteCarloLayout layoutAlg = new MonteCarloLayout(numberOfSamples, 20, 150);
-		layoutAlg.set_factorweight(20, 20);
+		final MonteCarloLayout layoutAlg = new MonteCarloLayout(numberOfSamples, 50, 100);
+		layoutAlg.setShapeIntersectionWeight(100);
+		layoutAlg.setConnectionIntersectionWeight(50);
+		layoutAlg.setTargetConnectionLengthFactor(100);
 		layoutAlg.layout(shapes, connections);
-	
+
 		show(shapes, connections);		
 	}
 	
